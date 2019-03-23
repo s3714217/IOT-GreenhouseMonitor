@@ -15,9 +15,9 @@ class SqliteRepository():
     '''
     Executes the supplied SQL query
     '''
-    def execute(self, sql):
+    def execute(self, sql, args = None):
         with sqlite3.connect(self.__database) as connection:
-            return connection.execute(sql)
+            return connection.execute(sql, args)
 
     '''
     Insert an entry into specified table with supplied items dictionary
