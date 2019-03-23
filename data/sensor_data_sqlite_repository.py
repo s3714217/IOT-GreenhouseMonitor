@@ -4,7 +4,7 @@ from data.sqlite_repository import SqliteRepository
 '''
 SQLite repository to handle persisting sensor data
 '''
-class SensorSqliteRepository(SqliteRepository):
+class SensorDataSqliteRepository(SqliteRepository):
 
     def __init__(self):
         database = os.getcwd()+"/resources/sensor_data.db"
