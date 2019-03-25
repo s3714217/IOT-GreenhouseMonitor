@@ -18,7 +18,10 @@ class DatabaseInitialiser():
         return os.path.isfile(database)
 
     def create_table(self, database_name, sql):
-        database = "%s/resources/%s.db" % (os.getcwd(), database_name)
+        root_directory = "%s/resources" % os.getcwd()
+        if not os.path.exists(root_directory):
+            os.mkdir(root_directory)
+        database = "%s/%s.db" % (root_directory, database_name)
         with sqlite3.connect(database) as connection:
             connection.execute(sql)
     
