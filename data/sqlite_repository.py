@@ -5,9 +5,11 @@ Generic SQLite repository
 '''
 class SqliteRepository():
 
-    seperator = ", "
+    SEPARATOR = ", "
 
-    insert_sql = "INSERT INTO %s (%s) VALUES (%s)"
+    INSERT_SQL = "INSERT INTO %s (%s) VALUES (%s)"
+
+    ONLY_DEFAULT_VALUES_INSERT_SQL = "INSERT INTO %s DEFAULT VALUES"
 
     def __init__(self, database):
         self.__database = database
@@ -24,16 +26,22 @@ class SqliteRepository():
 
     '''
     Insert an entry into specified table with supplied items dictionary
+    Prone to SQL Injection - But we would realistically use some sort of ORM
     '''
     def insert(self, table, items):
         # Split out the dictionary into separate lists
         keys = []
         values = []
-        for key, value in items.items():
-            keys.append(key)
-            values.append(str(value))
+        if items is not None:
+            for key, value in items.items():
+                keys.append(key)
+                values.append(str(value))
         # Join each list into single strings
-        keys_joined = self.seperator.join(keys)
-        values_joined = self.seperator.join(values)
+        keys_joined = self.SEPARATOR.join(keys)
+        values_joined = self.SEPARATOR.join(values)
         # Insert into database
-        return self.execute(self.insert_sql % (table, keys_joined, values_joined))
+        if (len(keys) > 0):
+            return self.execute(self.INSERT_SQL % (table, keys_joined, values_joined))
+        else:
+            return self.execute(self.ONLY_DEFAULT_VALUES_INSERT_SQL % table)
+        

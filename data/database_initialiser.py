@@ -3,11 +3,15 @@ import sqlite3
 
 class DatabaseInitialiser():
 
-    create_sensor_data_sql = "CREATE TABLE `SensorLog` ( \
+    CREATE_SENSOR_LOG_SQL = "CREATE TABLE `SensorLog` ( \
             `ID` INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, \
             `TEMPERATURE` INTEGER NOT NULL, \
             `HUMIDITY` INTEGER NOT NULL, \
             `TIMESTAMP` DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')) \
+        );"
+
+    CREATE_NOTIFICATION_LOG_SQL = "CREATE TABLE `NotificationLog` ( \
+            `TIMESTAMP` DATETIME PRIMARY KEY UNIQUE DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')) \
         );"
 
     def __init__(self):
@@ -37,4 +41,5 @@ class DatabaseInitialiser():
     def init_sensor_data(self):
         database_name = "sensor_data"
         if not self.database_exists(database_name):
-            self.create_table(database_name, self.create_sensor_data_sql)
+            self.create_table(database_name, self.CREATE_SENSOR_LOG_SQL)
+            self.create_table(database_name, self.CREATE_NOTIFICATION_LOG_SQL)

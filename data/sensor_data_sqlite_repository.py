@@ -22,6 +22,9 @@ class SensorDataSqliteRepository(SqliteRepository):
         AND (temperature NOT BETWEEN :min_temperature AND :max_temperature \
         OR humidity NOT BETWEEN :min_humidity AND :max_humidity)"
 
+    COUNT_NOTIFICATIONS_SENT_SQL = "SELECT COUNT(*) FROM NotificationLog \
+        WHERE timestamp BETWEEN DATE(:date) AND DATE(:date, '+1 day')"
+
     def __init__(self, config):
         self.__config = config
         database = os.getcwd()+"/resources/sensor_data.db"
@@ -43,6 +46,15 @@ class SensorDataSqliteRepository(SqliteRepository):
         super().insert(table, items)
 
     '''
+    Insert an entry into the NotificationLog table
+    '''
+    def insert_notification_log(self):
+        logging.debug("Inserting SensorLog Entry")
+
+        table = "NotificationLog"
+        super().insert(table, None)
+
+    '''
     Count the total entries outside the configured ranges for any given day
     '''
     def count_out_of_range_logs(self, date):
@@ -54,6 +66,15 @@ class SensorDataSqliteRepository(SqliteRepository):
             "max_humidity": self.__config.get_max_humidity()
         }).fetchone()
         logging.debug("Counted %d entries outside ranges" % result[0])
+        return result[0]
+
+    '''
+    Count the total entries in the NotificationLog table for any given day
+    '''
+    def count_notifications_sent(self, date):
+        result = super().execute(self.COUNT_NOTIFICATIONS_SENT_SQL, {
+            "date": date.strftime(self.DATE_FORMAT)}).fetchone()
+        logging.debug("Counted %d notification(s) sent" % result[0])
         return result[0]
 
     '''
