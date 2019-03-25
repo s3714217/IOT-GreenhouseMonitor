@@ -13,10 +13,16 @@ class DatabaseInitialiser():
     def __init__(self):
         pass
 
+    '''
+    Determine if a database exists
+    '''
     def database_exists(self, database_name):
         database = "%s/resources/%s.db" % (os.getcwd(), database_name)
         return os.path.isfile(database)
 
+    '''
+    Create a table within a database
+    '''
     def create_table(self, database_name, sql):
         root_directory = "%s/resources" % os.getcwd()
         if not os.path.exists(root_directory):
@@ -25,6 +31,9 @@ class DatabaseInitialiser():
         with sqlite3.connect(database) as connection:
             connection.execute(sql)
     
+    '''
+    Initialise the sensor_data database
+    '''
     def init_sensor_data(self):
         database_name = "sensor_data"
         if not self.database_exists(database_name):
