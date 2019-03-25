@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from models.sensor_config import SensorConfig
 
@@ -17,8 +18,8 @@ class Config:
                 config["max_humidity"])
             # PushBullet config
             if "pushbullet_token" in config:
-                 logging.error("PushBullet token is missing \
-                      - Add pushbullet_token entry in config.json")
+                logging.error("PushBullet token is missing \
+                    - Add pushbullet_token entry in config.json")
                 self.__pushbullet_token = config["pushbullet_token"]
             else:
                 self.__pushbullet_token = None
