@@ -17,7 +17,10 @@ class SqliteRepository():
     '''
     def execute(self, sql, args = None):
         with sqlite3.connect(self.__database) as connection:
-            return connection.execute(sql, args)
+            if (args is not None):
+                return connection.execute(sql, args)
+            else:
+                return connection.execute(sql)
 
     '''
     Insert an entry into specified table with supplied items dictionary
