@@ -9,13 +9,20 @@ SQLite repository to handle persisting sensor data
 '''
 class SensorDataSqliteRepository(SqliteRepository):
 
+    DATE_FORMAT = "%Y-%m-%d"
+
     TEMPERATURE_INDEX = 0
     HUMIDITY_INDEX = 1
     TIMESTAMP_INDEX = 2
-    DATE_FORMAT = "%Y-%m-%d"
+
+    MIN_DATE_INDEX = 0
+    MAX_DATE_INDEX = 1
 
     SELECT_DAYS_LOGS_SQL = "SELECT temperature, humidity, timestamp FROM SensorLog \
         WHERE timestamp >= DATE(:date) AND timestamp < DATE(:date, '+1 day')"
+
+    SELECT_DATE_SPAN_SQL = "SELECT DATE(MIN(timestamp), 'start of day'), \
+        DATE(MAX(timestamp), 'start of day') FROM SensorLog"
 
     COUNT_OUT_OF_RANGE_LOGS_SQL = "SELECT COUNT(*) FROM SensorLog \
         WHERE timestamp BETWEEN DATE(:date) AND DATE(:date, '+1 day') \
@@ -81,8 +88,7 @@ class SensorDataSqliteRepository(SqliteRepository):
     Select all sensor logs for the supplied date
     '''
     def select_days_logs(self, date):
-        results = super().execute(self.SELECT_DAYS_LOGS_SQL, \
-            { "date": date.strftime(self.DATE_FORMAT) })
+        results = super().execute(self.SELECT_DAYS_LOGS_SQL, { "date": date })
 
         logs = []
         for result in results:
@@ -91,3 +97,12 @@ class SensorDataSqliteRepository(SqliteRepository):
                 result[self.HUMIDITY_INDEX], 
                 result[self.TIMESTAMP_INDEX]))
         return logs
+
+    '''
+    Select the SensorLog's entries min and max date
+    '''
+    def select_dates_span(self):
+        results = super().execute(self.SELECT_DATE_SPAN_SQL).fetchone()
+        logging.debug("Selected dates span - MIN: %s, MAX: %s" % \
+            (results[self.MIN_DATE_INDEX], results[self.MAX_DATE_INDEX]))
+        return results
