@@ -66,7 +66,8 @@ class CreateReport:
         if not os.path.exists(file_path):
             # Append titles
             with open(file_path, "a+") as report:
-                report.write("Date,Status\r\n")
+                csv_writer = csv.writer(report, delimiter=',', quotechar='"')
+                csv_writer.writerow(["Date", "Status"])
         return file_path
 
     '''
@@ -74,10 +75,12 @@ class CreateReport:
     '''
     def append_status(self, file_path, date, results):
         with open(file_path, "a+") as report:
+            csv_writer = csv.writer(report, delimiter=',', quotechar='"')
             if (len(results) == 0):
-                report.write("%s,OK\r\n" % date)
+                csv_writer.writerow([date, "OK"])
             else:
-                report.write("%s,BAD: %s\r\n" % (date, ", ".join(results)))
+                bad_reason = "BAD: %s" % ", ".join(results)
+                csv_writer.writerow([date, bad_reason])
 
 if __name__ == "__main__":
     logging.basicConfig(level = logging.DEBUG)
