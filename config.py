@@ -6,9 +6,8 @@ from models.sensor_config import SensorConfig
 class Config:
 
     def __init__(self):
-        # Read config file
+        # Read config file and create required model classes
         with open(os.getcwd()+"/config.json", "r") as config_file:
-            # Create required model classes
             config = json.load(config_file)
             # Sensor config
             self.__sensor_config = SensorConfig(
@@ -18,10 +17,10 @@ class Config:
                 config["max_humidity"])
             # PushBullet config
             if "pushbullet_token" in config:
-                logging.error("PushBullet token is missing \
-                    - Add pushbullet_token entry in config.json")
+                logging.debug("Pushbullet token found")
                 self.__pushbullet_token = config["pushbullet_token"]
             else:
+                logging.error("Add pushbullet_token entry in config.json")
                 self.__pushbullet_token = None
 
     def get_sensor_config(self):
