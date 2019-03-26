@@ -44,8 +44,8 @@ class CreateReport:
             results = self.__validator.validate_sensor_logs(days_logs)
             # Ensure reports directory exists
             self.create_reports_directory()
-            # Ensure report file for day exists
-            file_path = self.create_report_file(date)
+            # Ensure report file
+            file_path = self.create_report_file()
             # Append status to report
             self.append_status(file_path, date, results)
 
@@ -58,11 +58,11 @@ class CreateReport:
             os.mkdir(reports_directory)
 
     '''
-    Creates a report file for the specified day
+    Creates the report file
     '''
-    def create_report_file(self, date):
+    def create_report_file(self):
         reports_directory = "%s/%s" % (os.getcwd(), self.REPORTS_DIR)
-        file_path = "%s/report-%s.csv" % (reports_directory, date)
+        file_path = "%s/report.csv" % reports_directory
         if not os.path.exists(file_path):
             # Append titles
             with open(file_path, "a+") as report:
