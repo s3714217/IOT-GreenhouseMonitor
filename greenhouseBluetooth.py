@@ -1,9 +1,11 @@
 import logging
+from config import Config
+from pushbullet.pushbullet import PushBullet
 
 class GreenhouseBluetooth:
 
-    def __init__(self):
-        pass
+    def __init__(self, pushbullet):
+        self.__pushbullet = pushbullet
 
     def get_paired_bluetooth_devices(self):
         # TODO: Get list of paired devices MAC addresses
@@ -22,6 +24,11 @@ class GreenhouseBluetooth:
 if __name__ == "__main__":
     logging.basicConfig(level = logging.DEBUG)
 
-    bluetooth = GreenhouseBluetooth()
+    # Instantiate dependencies
+    config = Config()
+    pushbullet_token = config.get_pushbullet_token()
+    pushbullet = PushBullet(pushbullet_token)
+
+    bluetooth = GreenhouseBluetooth(pushbullet)
     paired_devices = bluetooth.get_paired_bluetooth_devices()
     bluetooth.notify_if_required(paired_devices)
