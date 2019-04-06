@@ -1,0 +1,57 @@
+Q. With the data that you have, what kind of data visualisation graph should be used?
+(Scatter plots, Bar charts and Histograms, Line plots, Pie charts, etc.)
+
+A. The type visualisation graph used completely depends on what information is available,
+and what is of concern. In our case, we are measuring temperature and humidity, with a
+concern on when these readings are outside specified ranges. The options on how do display
+this are endless: Scatter plots of all readings, Bar charts of min/max readings, histograms
+to demonstrate distribution of readings, Line plots to show changes of readings throughout a 
+day, Pie charts to show percentages within certain ranges, etc.
+
+We have made a decision to use a bar graph, displaying min and max readings for the past week,
+along with a hexbin plot showing the correlation between temperature and humidity over a day.
+
+Q. What should be represented in the above graph? Why did you make that decision?
+
+A. The decision on what to display was made due to a number of factors. We had to consider
+how much data will be displayed, and how easy will this data be to ingest. We considered
+what was the most important concern? And what information can better help us tweak our
+configuration to be useful. We also had the hardware we are using as a consideration,
+due to the limited processing power of our pi's.
+
+The graphs we have decided to use combined are a perfect tool to help us further tweak our
+configuration to alert during circumstance that actually warrant alerts!
+
+Q. Python supports numerous data visualisation libraries. Which two libraries did you
+narrow it down to?
+
+A. We have decided to use the following two libraries:
+
+    1. Matplotlib
+    2. Seaborn
+
+Q. Provide an analytical comparison of the libraries used, advantages/disadvantages,
+simplicity/complexity, flexibility/configurations, anything you may think is necessary.
+
+A. 
+
+    1. Matplotlib is quite extensive in functionality, at a cost of complexity. It is 
+    capable of anything and everything graph related, but will require some training.
+
+    Advantages:
+     - Extremely customizable
+     - Extensive list of graphs
+
+    Disadvantages:
+     - Complex to use
+
+    2. Seaborn focuses on ease-of-use. It provides a quick way to graph what you want
+    with themes and presets available. It is capable of creating a large number of graphs
+    and provides pre-made data sets to help when testing.
+
+    Advantages:
+     - Ease of use
+     - Testing made easy with data sets
+
+    Disadvantages:
+     - Simplicity can make customization harder
