@@ -30,9 +30,14 @@ class SensorDataSqliteRepository(SqliteRepository):
         WHERE timestamp BETWEEN DATE(:date) AND DATE(:date, '+1 day') \
         AND (temperature NOT BETWEEN :min_temperature AND :max_temperature \
         OR humidity NOT BETWEEN :min_humidity AND :max_humidity)"
-
+   
     COUNT_NOTIFICATIONS_SENT_SQL = "SELECT COUNT(*) FROM NotificationLog \
-        WHERE timestamp BETWEEN DATE(:date) AND DATE(:date, '+1 day')"
+        WHERE timestamp BETWEEN DATE(:date) AND DATE(:date, '+1 day') \
+        AND Device IS NULL"
+
+    COUNT_DEVICE_NOTIFICATIONS_SENT_SQL = "SELECT COUNT(*) FROM NotificationLog \
+        WHERE timestamp BETWEEN DATE(:date) AND DATE(:date, '+1 day') \
+        AND Device = :device"
 
     SELECT_WEEK_MIN_MAX_TEMPS_SQL = "SELECT Date(timestamp) AS 'Date', \
         MIN(Temperature) AS 'Min', MAX(Temperature) AS 'Max' FROM SensorLog \
@@ -48,14 +53,15 @@ class SensorDataSqliteRepository(SqliteRepository):
     '''
     Insert an entry into the SensorLog table
     '''
-    def insert_sensor_log(self, temperature, humidity):
+    def insert_sensor_log(self, sensor_log):
+
         logging.debug("Inserting SensorLog Entry - TEMPERATURE: %s, HUMIDITY: %s" \
-            % (temperature, humidity))
+            % (sensor_log.get_temperature(), sensor_log.get_humidity()))
 
         table = "SensorLog"
         items = {
-            "TEMPERATURE": temperature,
-            "HUMIDITY": humidity
+            "Temperature": sensor_log.get_temperature(),
+            "Humidity": sensor_log.get_humidity()
         }
 
         super().insert(table, items)
@@ -63,11 +69,15 @@ class SensorDataSqliteRepository(SqliteRepository):
     '''
     Insert an entry into the NotificationLog table
     '''
-    def insert_notification_log(self):
+    def insert_notification_log(self, device = None):
         logging.debug("Inserting SensorLog Entry")
 
         table = "NotificationLog"
-        super().insert(table, None)
+        if device is None:
+            super().insert(table, None)
+        else:
+            device = "'%s'" % device
+            super().insert(table, { "Device": device })
 
     '''
     Count the total entries outside the configured ranges for any given day
@@ -84,11 +94,18 @@ class SensorDataSqliteRepository(SqliteRepository):
         return result[0]
 
     '''
-    Count the total entries in the NotificationLog table for any given day
+    Count the total entries in the NotificationLog table for any given day,
+    optionally supplying a device
     '''
-    def count_notifications_sent(self, date):
-        result = super().execute(self.COUNT_NOTIFICATIONS_SENT_SQL, {
-            "date": date.strftime(self.DATE_FORMAT)}).fetchone()
+    def count_notifications_sent(self, date, device = None):
+        # Determine sql to run
+        sql = self.COUNT_NOTIFICATIONS_SENT_SQL \
+            if device is None else self.COUNT_DEVICE_NOTIFICATIONS_SENT_SQL
+
+        # Execute sql
+        result = super().execute(sql, {
+            "date": date.strftime(self.DATE_FORMAT),
+            "device": device}).fetchone()
         logging.debug("Counted %d notification(s) sent" % result[0])
         return result[0]
 
