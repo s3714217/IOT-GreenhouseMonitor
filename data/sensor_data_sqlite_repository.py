@@ -18,8 +18,10 @@ class SensorDataSqliteRepository(SqliteRepository):
     MIN_DATE_INDEX = 0
     MAX_DATE_INDEX = 1
 
-    SELECT_DAYS_LOGS_SQL = "SELECT temperature, humidity, timestamp FROM SensorLog \
-        WHERE timestamp >= DATE(:date) AND timestamp < DATE(:date, '+1 day')"
+    SELECT_DAYS_LOGS_SQL = "SELECT temperature, humidity, timestamp \
+        FROM SensorLog \
+        WHERE timestamp >= DATE(:date) \
+        AND timestamp < DATE(:date, '+1 day')"
 
     SELECT_DATE_SPAN_SQL = "SELECT DATE(MIN(timestamp), 'start of day'), \
         DATE(MAX(timestamp), 'start of day') FROM SensorLog"
@@ -36,6 +38,12 @@ class SensorDataSqliteRepository(SqliteRepository):
     COUNT_DEVICE_NOTIFICATIONS_SENT_SQL = "SELECT COUNT(*) FROM NotificationLog \
         WHERE timestamp BETWEEN DATE(:date) AND DATE(:date, '+1 day') \
         AND Device = :device"
+
+    SELECT_WEEK_MIN_MAX_TEMPS_SQL = "SELECT Date(timestamp) AS 'Date', \
+        MIN(Temperature) AS 'Min', MAX(Temperature) AS 'Max' FROM SensorLog \
+        WHERE Timestamp >= DATE('now', 'localtime', '-6 day') \
+        AND Timestamp < DATE('now', 'localtime', '+1 day') \
+        GROUP BY Date(Timestamp) ORDER BY Timestamp ASC"
 
     def __init__(self, config):
         self.__config = config
@@ -123,3 +131,14 @@ class SensorDataSqliteRepository(SqliteRepository):
         logging.debug("Selected dates span - MIN: %s, MAX: %s" % \
             (results[self.MIN_DATE_INDEX], results[self.MAX_DATE_INDEX]))
         return results
+
+    '''
+    Select the min and max temps for the past week, including today
+    '''
+    def select_week_min_max_temps(self):
+        results = super().execute(self.SELECT_WEEK_MIN_MAX_TEMPS_SQL)
+        logging.debug("Selected weeks min max temps")
+        temps = []
+        for result in results:
+            temps.append(result)
+        return temps
