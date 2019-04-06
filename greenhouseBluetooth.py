@@ -1,6 +1,8 @@
 import logging
 from config import Config
 from pushbullet.pushbullet import PushBullet
+import subprocess as sp
+import os
 
 class GreenhouseBluetooth:
 
@@ -8,17 +10,30 @@ class GreenhouseBluetooth:
         self.__pushbullet = pushbullet
 
     def get_paired_bluetooth_devices(self):
-        # TODO: Get list of paired devices MAC addresses
-        # 1. Decode list output
-        # 2. Parse each MAC entry by:
-        # get index of last )
-        # get index of last (
-        # Substring whats in between those indexes
-        return []
+       p = sp.Popen(["bt-device","--list"], stding = sp.PIPE, stdout = sp.PIPE, close-fds = True) 
+       (stdout, stdin) = (p.stdout, p.stdin) 
+        data = stdout.readlines()
+        str2 = []
+
+      for str1 in data:
+        if (str1 != data[0]):
+          str1 = str1.split()
+          str2.append(str1[len(str1)-1])
+        else:
+            pass
+     #the MAC_address is still encoded with b'( )
+        return str2
 
     def notify_if_required(self, paired_devices):
-        # TODO: Determine which paired devices are currently connected
-        # TODO: Send notification to devices we have not yet sent a notification to today
+        device_MAC_address = None
+        nearby_devices = bluetooth.discover_devices()
+        currently_connected_device = []
+      for str1 in paired_devices:
+       for mac in nearby_devices:
+           if (str1 == mac.encoded()):#the above mac_address is still encoded so I encoded the nearby address to comparing
+              currently_connected_device.append(mac)#Identified connected device
+            else:  # TODO: Send notification to devices we have not yet sent a notification to today
+         
         pass
 
 if __name__ == "__main__":
