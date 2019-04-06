@@ -21,12 +21,19 @@ class GreenhouseBluetooth:
           str2.append(str1[len(str1)-1])
         else:
             pass
-     
+     #the MAC_address is still encoded with b'( )
         return str2
 
     def notify_if_required(self, paired_devices):
-        # TODO: Determine which paired devices are currently connected
-        # TODO: Send notification to devices we have not yet sent a notification to today
+        device_MAC_address = None
+        nearby_devices = bluetooth.discover_devices()
+        currently_connected_device = []
+      for str1 in paired_devices:
+       for mac in nearby_devices:
+           if (str1 == mac.encoded()):#the above mac_address is still encoded so I encoded the nearby address to comparing
+              currently_connected_device.append(mac)#Identified connected device
+            else:  # TODO: Send notification to devices we have not yet sent a notification to today
+         
         pass
 
 if __name__ == "__main__":
