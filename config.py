@@ -3,6 +3,9 @@ import logging
 import os
 from models.sensor_config import SensorConfig
 
+'''
+Parses the config.json
+'''
 class Config:
 
     def __init__(self):

@@ -1,17 +1,21 @@
 import os
 import sqlite3
 
+'''
+Creates databases if they do not exist
+'''
 class DatabaseInitialiser():
 
     CREATE_SENSOR_LOG_SQL = "CREATE TABLE `SensorLog` ( \
-            `ID` INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, \
-            `TEMPERATURE` INTEGER NOT NULL, \
-            `HUMIDITY` INTEGER NOT NULL, \
-            `TIMESTAMP` DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')) \
+            `Id` INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, \
+            `Temperature` INTEGER NOT NULL, \
+            `Humidity` INTEGER NOT NULL, \
+            `Timestamp` DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')) \
         );"
 
     CREATE_NOTIFICATION_LOG_SQL = "CREATE TABLE `NotificationLog` ( \
-            `TIMESTAMP` DATETIME PRIMARY KEY UNIQUE DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')) \
+            `Timestamp` DATETIME PRIMARY KEY UNIQUE DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')), \
+            `Device` TEXT DEFAULT NULL  \
         );"
 
     def __init__(self):

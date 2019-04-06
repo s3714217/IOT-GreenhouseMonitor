@@ -2,13 +2,13 @@ import json
 import logging
 import requests
 
-class PushBullet:
+class Pushbullet:
 
     def __init__(self, token):
         self.__token = token
 
     '''
-    Send a notification via PushBullet with a title and body
+    Send a notification via Pushbullet with a title and body
     '''
     def send_note(self, title, body):
         logging.debug("Sending notification - Title: %s" % title)
@@ -23,7 +23,7 @@ class PushBullet:
             })
 
         if(response.status_code != 200):
-            logging.error("Failed to send PushBullet notification")
+            logging.error("Failed to send Pushbullet notification")
             raise Exception()
 
         logging.info("Notification sent.")
