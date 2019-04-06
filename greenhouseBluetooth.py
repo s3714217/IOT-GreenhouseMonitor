@@ -18,7 +18,6 @@ class GreenhouseBluetooth:
       for str1 in data:
         if (str1 != data[0]):
           str1 = str1.split()
-          print(str1[len(str1)-1])
           str2.append(str1[len(str1)-1])
         else:
             pass
