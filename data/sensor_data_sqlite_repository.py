@@ -18,6 +18,7 @@ class SensorDataSqliteRepository(SqliteRepository):
     MIN_DATE_INDEX = 0
     MAX_DATE_INDEX = 1
 
+    # These would normally be stored procs!
     SELECT_DAYS_LOGS_SQL = "SELECT temperature, humidity, timestamp \
         FROM SensorLog \
         WHERE timestamp >= DATE(:date) \

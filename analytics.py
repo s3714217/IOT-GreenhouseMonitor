@@ -19,6 +19,9 @@ class Analytics:
         data = self.__repository.select_week_min_max_temps()
         graph.generate(data)
 
+    '''
+    Generate a hexbin plot of the days temperature and humidity
+    '''
     def generate_hexbin_plot(self):
         plot = HexbinPlot()
         data = self.__repository.select_days_logs(date.today())

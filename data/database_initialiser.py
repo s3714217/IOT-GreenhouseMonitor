@@ -1,6 +1,9 @@
 import os
 import sqlite3
 
+'''
+Creates databases if they do not exist
+'''
 class DatabaseInitialiser():
 
     CREATE_SENSOR_LOG_SQL = "CREATE TABLE `SensorLog` ( \
