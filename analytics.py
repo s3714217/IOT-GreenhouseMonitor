@@ -2,6 +2,8 @@ import logging
 from config import Config
 from data.database_initialiser import DatabaseInitialiser
 from data.sensor_data_sqlite_repository import SensorDataSqliteRepository
+from datetime import date
+from visualisation.hexbin_plot import HexbinPlot
 from visualisation.weekly_graph import WeeklyGraph
 
 class Analytics:
@@ -13,9 +15,14 @@ class Analytics:
     Generate a graph of the last weeks minimum and maximum temperatures
     '''
     def generate_weekly_graph(self):
-        wg = WeeklyGraph()
-        temps = self.__repository.select_week_min_max_temps()
-        wg.generate(temps)        
+        graph = WeeklyGraph()
+        data = self.__repository.select_week_min_max_temps()
+        graph.generate(data)
+
+    def generate_hexbin_plot(self):
+        plot = HexbinPlot()
+        data = self.__repository.select_days_logs(date.today())
+        plot.generate(data)
 
 if __name__ == "__main__":
     logging.basicConfig(level = logging.DEBUG)
@@ -31,3 +38,4 @@ if __name__ == "__main__":
     # Generate graphs
     analytics = Analytics(repository)
     analytics.generate_weekly_graph()
+    analytics.generate_hexbin_plot()

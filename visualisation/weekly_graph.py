@@ -69,4 +69,4 @@ class WeeklyGraph:
         ax.legend()
 
         # Save graph to file
-        plt.savefig("weekly-temps.png", bbox_inches="tight");
+        plt.savefig("weeks-temps_bar-graph.png", bbox_inches="tight");
