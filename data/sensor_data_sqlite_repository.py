@@ -51,7 +51,7 @@ class SensorDataSqliteRepository(SqliteRepository):
     '''
     def insert_sensor_log(self, sensor_log):
 
-        logging.debug("Inserting SensorLog Entry - TEMPERATURE: %s, HUMIDITY: %s" \
+        logging.debug("Inserting SensorLog entry - TEMPERATURE: %s, HUMIDITY: %s" \
             % (sensor_log.get_temperature(), sensor_log.get_humidity()))
 
         table = "SensorLog"
@@ -66,7 +66,7 @@ class SensorDataSqliteRepository(SqliteRepository):
     Insert an entry into the NotificationLog table
     '''
     def insert_notification_log(self, device = None):
-        logging.debug("Inserting SensorLog Entry")
+        logging.debug("Inserting NotificationLog entry")
 
         table = "NotificationLog"
         if device is None:
