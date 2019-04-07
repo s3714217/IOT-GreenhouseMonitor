@@ -2,6 +2,9 @@ import logging
 from datetime import datetime
 from notifications.pushbullet import Pushbullet
 
+'''
+Handles sending notifications and determining if notifications need to be sent
+'''
 class Notification:
 
     def __init__(self, sensor_data_repository, pushbullet_token = None):

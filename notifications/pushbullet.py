@@ -2,6 +2,9 @@ import json
 import logging
 import requests
 
+'''
+Handles sending Pushbullet notifications
+'''
 class Pushbullet:
 
     def __init__(self, token):
