@@ -35,3 +35,24 @@ class Notification:
         self.__pushbullet.send_note("Sensor Monitor", 
             "Out of range reading! %s" % ", ".join(reasons))
         self.__repository.insert_notification_log()
+
+    '''
+    Notify when a connected device is nearby
+    '''
+    def notify_connected_device(self, device, sensor_log, reasons):
+        if self.__pushbullet is None:
+            logging.error("Add pushbullet_token entry in config.json")
+            return
+
+        temperature = sensor_log.get_temperature()
+        humidity = sensor_log.get_humidity()
+
+        if len(reasons) is 0:    
+            self.__pushbullet.send_note("Connected Device: %s" % device, 
+                "Temp: %d, Humidity: %d, Status: OK" \
+                % (temperature, humidity))
+        else:
+            self.__pushbullet.send_note("Connected Device: %s" % device, 
+                "Temp: %d, Humidity: %d, Status: BAD %s" \
+                % (temperature, humidity, ", ".join(reasons)))
+        self.__repository.insert_notification_log(device)
