@@ -6,6 +6,7 @@ Creates databases if they do not exist
 '''
 class DatabaseInitialiser():
 
+    # SQL to create SensorLog table
     CREATE_SENSOR_LOG_SQL = "CREATE TABLE `SensorLog` ( \
             `Id` INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, \
             `Temperature` INTEGER NOT NULL, \
@@ -13,13 +14,11 @@ class DatabaseInitialiser():
             `Timestamp` DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')) \
         );"
 
+    # SQL to create NotificationLog table
     CREATE_NOTIFICATION_LOG_SQL = "CREATE TABLE `NotificationLog` ( \
             `Timestamp` DATETIME PRIMARY KEY UNIQUE DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'localtime')), \
             `Device` TEXT DEFAULT NULL  \
         );"
-
-    def __init__(self):
-        pass
 
     '''
     Determine if a database exists
