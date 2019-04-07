@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import logging
 from config import Config
 from data.database_initialiser import DatabaseInitialiser
