@@ -3,19 +3,13 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import date, timedelta
+from helpers.min_max_index import MinMaxIndex
 
 class WeeklyGraph:
 
     DATE_FORMAT = "%Y-%m-%d"
 
     ONE_DAY_DELTA = timedelta(days = 1)
-
-    DATE_INDEX = 0
-    MIN_INDEX = 1
-    MAX_INDEX = 2
-
-    def __init__(self):
-        pass
 
     '''
     Generate a graph of the last weeks minimum and maximum temperatures
@@ -31,14 +25,14 @@ class WeeklyGraph:
         for i in range(0, 7):
             day = today - self.ONE_DAY_DELTA * (6 - i)
             day_str = day.strftime(self.DATE_FORMAT)
-            if (temps[temps_index][self.DATE_INDEX] != day_str):
+            if (temps[temps_index][MinMaxIndex.DATE] != day_str):
                 logging.debug("No entries for date %s" % day_str)
                 low += (0,)
                 high += (0,)
                 continue
             logging.debug("Found entries for date %s" % day_str)
-            low += (temps[temps_index][self.MIN_INDEX],)
-            high += (temps[temps_index][self.MAX_INDEX],)
+            low += (temps[temps_index][MinMaxIndex.MIN],)
+            high += (temps[temps_index][MinMaxIndex.MAX],)
             temps_index += 1
 
         # Init graph
