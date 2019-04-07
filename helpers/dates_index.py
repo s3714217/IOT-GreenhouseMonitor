@@ -1,5 +1,5 @@
-from enum import enum
+from enum import IntEnum
 
-class DatesIndex(Enum):
+class DatesIndex(IntEnum):
     MIN = 0
     MAX = 1

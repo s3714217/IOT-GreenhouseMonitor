@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import IntEnum
 
-class SensorLogIndex(Enum):
+class SensorLogIndex(IntEnum):
     TEMPERATURE = 0
     HUMIDITY = 1
     TIMESTAMP = 2
