@@ -2,6 +2,8 @@ import logging
 import os
 from datetime import datetime
 from data.sqlite_repository import SqliteRepository
+from helpers.dates_index import DatesIndex
+from helpers.sensor_log_index import SensorLogIndex
 from models.sensor_log import SensorLog
 
 '''
@@ -10,13 +12,6 @@ SQLite repository to handle persisting sensor data
 class SensorDataSqliteRepository(SqliteRepository):
 
     DATE_FORMAT = "%Y-%m-%d"
-
-    TEMPERATURE_INDEX = 0
-    HUMIDITY_INDEX = 1
-    TIMESTAMP_INDEX = 2
-
-    MIN_DATE_INDEX = 0
-    MAX_DATE_INDEX = 1
 
     # These would normally be stored procs!
     SELECT_DAYS_LOGS_SQL = "SELECT temperature, humidity, timestamp \
@@ -119,9 +114,9 @@ class SensorDataSqliteRepository(SqliteRepository):
         logs = []
         for result in results:
             logs.append(SensorLog(
-                result[self.TEMPERATURE_INDEX], 
-                result[self.HUMIDITY_INDEX], 
-                result[self.TIMESTAMP_INDEX]))
+                result[SensorLogIndex.TEMPERATURE], 
+                result[SensorLogIndex.HUMIDITY], 
+                result[SensorLogIndex.TIMESTAMP]))
         return logs
 
     '''
@@ -129,8 +124,8 @@ class SensorDataSqliteRepository(SqliteRepository):
     '''
     def select_dates_span(self):
         results = super().execute(self.SELECT_DATE_SPAN_SQL).fetchone()
-        logging.debug("Selected dates span - MIN: %s, MAX: %s" % \
-            (results[self.MIN_DATE_INDEX], results[self.MAX_DATE_INDEX]))
+        logging.debug("Selected dates span - MIN: %s, MAX: %s" \
+            % (results[DatesIndex.MIN], results[DatesIndex.MAX]))
         return results
 
     '''
